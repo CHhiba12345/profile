@@ -1,0 +1,36 @@
+name: profile
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_native_splash: ^2.3.9
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "assets/icon.png"
+
+flutter:
+  assets:
+    - assets/welcome_image.jpeg
+    - assets/second_page_background.jpeg
+    - assets/profile_picture.jpeg
+    - assets/profile.jpeg
+    - assets/splash.jpeg
+
+  uses-material-design: true

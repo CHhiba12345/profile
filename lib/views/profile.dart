@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controller.dart';
+import 'login.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserController userController;
@@ -32,6 +33,18 @@ class _ProfilePageState extends State<ProfilePage> {
             fontFamily: 'Roboto',
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Code pour effectuer la déconnexion
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(

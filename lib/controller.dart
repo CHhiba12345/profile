@@ -18,6 +18,7 @@ class ProfileInfo {
   final String content;
 
   ProfileInfo({required this.title, required this.content});
+
 }
 
 

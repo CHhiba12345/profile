@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
 }
 
 def localProperties = new Properties()
@@ -23,6 +24,10 @@ if (flutterVersionName == null) {
 }
 
 android {
+    lintOptions {
+        warning 'deprecation'
+        warning 'unchecked'
+    }
     namespace "com.example.profile"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -49,6 +54,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -58,10 +64,14 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    def multidex_version = "2.0.1"
+    implementation "androidx.multidex:multidex:$multidex_version"
+}

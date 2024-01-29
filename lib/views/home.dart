@@ -1,21 +1,27 @@
-// home.dart
 import 'package:flutter/material.dart';
-import '../controller.dart';
+import '../controller.dart'; // Assurez-vous d'importer correctement votre fichier controller.dart
 import 'profile.dart';
 
-class HomeController extends StatelessWidget {
+class HomeController extends StatefulWidget {
+  final String email;
+
+  HomeController({required this.email});
+
+  @override
+  _HomeControllerState createState() => _HomeControllerState();
+}
+
+class _HomeControllerState extends State<HomeController> {
   final UserController _userController = UserController();
-//final rend _userController "fixe" pour éviter toute confusion et erreur de manipulation accidentelle.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('profil'),
+        title: Text('Profil'),
       ),
       body: Stack(
-        //Dispose les éléments en couches
         fit: StackFit.expand,
-        //le Stack occupera tout l'espace disponible dans son parent.
         children: [
           Image.asset(
             'assets/welcome_image.jpeg',
@@ -31,7 +37,7 @@ class HomeController extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Welcome to my profile',
+                  'welcome  ${widget.email}',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 SizedBox(height: 30),
@@ -44,7 +50,7 @@ class HomeController extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text('View Profile'),
+                  child: Text('Voir le profil'),
                 ),
               ],
             ),
@@ -54,3 +60,4 @@ class HomeController extends StatelessWidget {
     );
   }
 }
+

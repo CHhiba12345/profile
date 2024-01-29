@@ -1,9 +1,13 @@
 // main.dart
 import 'package:flutter/material.dart';
-import 'controller.dart';
 import 'views/splashscreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -17,4 +21,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 

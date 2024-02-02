@@ -12,8 +12,9 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.3.9
   cupertino_icons: ^1.0.2
-  firebase_core: ^2.0.0
-  firebase_auth: ^4.0.0
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  flutterfire_cli: ^0.3.0-dev.19
   cloud_firestore: ^4.14.0
 
 dev_dependencies:

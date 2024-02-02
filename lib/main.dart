@@ -2,10 +2,14 @@
 import 'package:flutter/material.dart';
 import 'views/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  // Assurez-vous que Firebase est initialisé avec les options spécifiées
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(MyApp());
 }
 
@@ -14,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Splash Screen',
+      debugShowCheckedModeBanner: false ,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

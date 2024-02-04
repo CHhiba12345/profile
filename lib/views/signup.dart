@@ -24,7 +24,8 @@ class _SignUpPageState extends State<SignUpPage> {
     String phoneNumber = phoneNumberController.text;
 
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -39,14 +40,14 @@ class _SignUpPageState extends State<SignUpPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeController(email: userCredential.user!.email!),
+          builder: (context) =>
+              HomeController(email: userCredential.user!.email!),
         ),
       );
     } catch (e) {
       showErrorMessage("Erreur d'inscription : ${e.toString()}");
     }
   }
-
 
   void showErrorMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

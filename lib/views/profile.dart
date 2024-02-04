@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:profile/auth/view_auth/sign_in_page/sign_in_page.dart';
+
 import '../controller.dart';
-import 'login.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserController userController;
 
-  ProfilePage({Key? key, required this.userController}) : super(key: key) {
-
-  }
+  ProfilePage({Key? key, required this.userController}) : super(key: key) {}
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               // Code pour effectuer la déconnexion
               Navigator.pushReplacement(
@@ -83,11 +82,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,//détermine la vitesse à laquelle l'animation s'effectue.
-              alignment: showInfo ? Alignment.bottomCenter : Alignment.topCenter,
+              curve: Curves
+                  .easeOut, //détermine la vitesse à laquelle l'animation s'effectue.
+              alignment:
+                  showInfo ? Alignment.bottomCenter : Alignment.topCenter,
               height: showInfo ? 50 : 450,
               child: ElevatedButton(
                 onPressed: () {
+                  /// methode sert a re-implemeenter les interface crees :
                   setState(() {
                     showInfo = !showInfo;
                     if (showInfo) {
@@ -126,8 +128,8 @@ class _ProfilePageState extends State<ProfilePage> {
       itemBuilder: (context, index) {
         //fonction qui sera appelée pour construire chaque élément de la liste
         return buildInfoTile(
-            title: widget.userController.list[index].title,
-            content: widget.userController.list[index].content,
+          title: widget.userController.list[index].title,
+          content: widget.userController.list[index].content,
         );
       },
     );

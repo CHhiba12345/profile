@@ -1,7 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
-import 'login.dart'; // Assurez-vous d'importer correctement la page de login
+import 'package:profile/auth/view_auth/sign_in_page/sign_in_page.dart';
+
+// Assurez-vous d'importer correctement la page de login
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -14,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginPage(), // Utilisez le nom correct de votre classe de page de login
+          builder: (context) =>
+              LoginPage(), // Utilisez le nom correct de votre classe de page de login
         ),
       );
     });
@@ -35,4 +41,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-

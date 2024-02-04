@@ -1,36 +1,31 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:profile/auth/model_auth/model_sign_in.dart';
 import 'package:profile/auth/model_auth/model_sign_up.dart';
+import 'package:profile/views/home.dart';
 import 'package:profile/views/signup.dart';
 
 /// +++++++++++++++++ Class [AuthController]++++++++++++++++++++++++
 /// va contenir les methodes de sign-in & sign-up et on va injecter  le classe [FirebaseAuth]
 /// ++++++++++++++++++++++++++ End ********************************
 ///
-final auth = FirebaseAuth.instance;
 
 class AuthController {
   final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
+  AuthController(this.auth, this.firestore);
 
-  AuthController(this.auth);
-
-  static Future<void> authenticateUser(SignIn model) async {
+  Future<void> authenticateUser(
+      BuildContext context, String email, String password) async {
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: username,
+        email: email,
         password: password,
       );
-      // Récupérez les informations de l'utilisateur depuis Firestore.
-      DocumentSnapshot userSnapshot = await _firestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
-
-      // Utilisez les données récupérées comme nécessaire.
-      String userEmail = userSnapshot['email'];
-      String userAddress = userSnapshot['address'];
-      String userPhoneNumber = userSnapshot['phoneNumber'];
-
+      print("=========retour depuis firebase==================");
       // Si l'authentification est réussie, redirigez l'utilisateur vers la page d'accueil.
       Navigator.pushReplacement(
         context,
@@ -40,7 +35,16 @@ class AuthController {
         ),
       );
     } catch (e) {
-      showErrorMessage("Erreur d'authentification : ${e.toString()}");
+      // showErrorMessage("Erreur d'authentification : ${e.toString()}");
+      print("=========erreur  depuis firebase==================");
+      ScaffoldMessenger.of(context).showSnackBar(
+        //utilisée pour afficher des SnackBars
+        //snackBar:une petite barre qui apparaît en bas de l'écran
+        SnackBar(
+          content: Text(e.toString()),
+          duration: const Duration(seconds: 3),
+        ),
+      );
     }
   }
 }

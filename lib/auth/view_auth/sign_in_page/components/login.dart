@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'signup.dart';
+import '../../../../views/home.dart';
+import '../../../../views/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-final   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TextEditingController usernameController = TextEditingController();
   // gérer la saisie de texte dans les champs de formulaire.
@@ -28,19 +28,22 @@ final   FirebaseFirestore _firestore = FirebaseFirestore.instance;
         password: password,
       );
       // Récupérez les informations de l'utilisateur depuis Firestore.
-      DocumentSnapshot userSnapshot = await _firestore.collection('users').doc(userCredential.user!.uid).get();
+      DocumentSnapshot userSnapshot = await _firestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .get();
 
       // Utilisez les données récupérées comme nécessaire.
       String userEmail = userSnapshot['email'];
       String userAddress = userSnapshot['address'];
       String userPhoneNumber = userSnapshot['phoneNumber'];
 
-
       // Si l'authentification est réussie, redirigez l'utilisateur vers la page d'accueil.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeController(email: userCredential.user!.email!),
+          builder: (context) =>
+              HomeController(email: userCredential.user!.email!),
         ),
       );
     } catch (e) {
@@ -57,6 +60,13 @@ final   FirebaseFirestore _firestore = FirebaseFirestore.instance;
         duration: const Duration(seconds: 3),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    usernameController.text = "chaoualihiba25@gmail.com";
+    passwordController.text = "123456";
+    super.initState();
   }
 
   @override
@@ -116,7 +126,8 @@ final   FirebaseFirestore _firestore = FirebaseFirestore.instance;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignUpPage(), // Assurez-vous d'avoir une classe SignUpPage
+                      builder: (context) =>
+                          SignUpPage(), // Assurez-vous d'avoir une classe SignUpPage
                     ),
                   );
                 },

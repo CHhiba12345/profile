@@ -20,21 +20,23 @@ class _HomeControllerState extends State<HomeController> {
   List<Task> tasks = [];
   List<Employee> employees = [];
 
+  // MARK: - Task Completion
+
   Future<void> _markTaskAsCompleted(String taskId) async {
     await _firestore.collection('tasks').doc(taskId).update({'completed': true});
-    _loadTasks();
   }
 
+  // Show completion message dialog
   void _showCompletionMessage(BuildContext context, String taskId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:const  Text('Good Job!'),
+          title: const Text('Good Job!'),
           content: Column(
             children: [
               const Text('You completed the task successfully.'),
-              if (widget.email != 'chaoualihiba25@gmail.com') // Afficher le commentaire seulement pour l'utilisateur
+              if (widget.email != 'chaoualihiba25@gmail.com')
                 const SizedBox(height: 10),
             ],
           ),
@@ -51,22 +53,29 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
-/// fucnction for delete task
-  /// description
+  // Add new employee
+  void _addNewEmployee(String firstName, String lastName, String position) {
+    _firestore.collection('employees').add({
+      'firstName': firstName,
+      'lastName': lastName,
+      'position': position,
+      'tasks': [],
+    }).then((_) {
+      _loadEmployees();
+    });
+  }
+
+  // Delete employee
   void _deleteEmployee(String employeeId) {
     _firestore.collection('employees').doc(employeeId).delete().then((_) {
       _loadEmployees();
     });
   }
 
-  /// ++++++++++++++++++++++++++++++++
-  /// fuction for fetch all task from task collection
-  /// and will return list of type task
-  /// hne tawika elmochkl lehne ak ey
-  /// **************************************
+  // Load tasks from Firebase
   Future<void> _loadTasksFromFirebase() async {
-    final   querySnapshot = await _firestore.collection('tasks').get() ;
-    print("get all query from snapshot ${querySnapshot.docs}"); //code fel git hub t3k wela just fel pc fel pc st3mlt git wela nn ey sta3melt amaa 7atit fih chtar l5edma bark lparty hethi mazedthech
+    final querySnapshot = await _firestore.collection('tasks').get();
+    print("get all query from snapshot ${querySnapshot.docs}");
     setState(() {
       tasks = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -74,33 +83,49 @@ class _HomeControllerState extends State<HomeController> {
           id: doc.id,
           task: data['task'],
           completed: data['completed'] ?? false,
-          employeeId: data['employeeId'] ?? '', // Ajout de l'ID de l'employé lié à la tâche
+          employeeId: data['employeeId'] ?? '',
           employeeIdInTask: data['employeeIdInTask'] ?? '',
         );
       }).toList();
     });
   }
 
-  /// ++++++++++++++++++++++++++++++++++++++++++++++
-  /// admin create task for an employe
-  /// and send them to collection Tasks
-  /// *******************************************
+  // Add new task
   Future<void> _addNewTask(String task, String employeeId) async {
-    // Ajouter une nouvelle tâche
     final DocumentReference taskRef = await _firestore.collection('tasks').add({
       'task': task,
       'completed': false,
       'employeeIdInTask': employeeId,
     });
 
-    // Mettre à jour la liste des tâches de l'employé avec l'ID de la nouvelle tâche
-    await _firestore.collection('employees').doc(employeeId).update({
-      'tasks': FieldValue.arrayUnion([taskRef.id]),
-    });
+    final DocumentSnapshot taskSnapshot = await taskRef.get();
 
-    _loadTasksFromFirebase();
+    // Check if the 'employeeIdInTask' matches
+    final Map<String, dynamic>? data = taskSnapshot.data() as Map<String, dynamic>?;
+
+    final dynamic employeeIdInTask = data?['employeeIdInTask'];
+    if (employeeIdInTask != null && employeeIdInTask is String && employeeIdInTask == employeeId) {
+      await _firestore.collection('employees').doc(employeeId).update({
+        'tasks': FieldValue.arrayUnion([taskRef.id]),
+      });
+
+      // Update only the tasks of the corresponding employee
+      for (Employee employee in employees) {
+        if (employee.id == employeeId) {
+          setState(() {
+            employee.tasks.add(taskRef.id);
+            employee.task_employee.add(taskRef.id);
+          });
+          break;
+        }
+      }
+
+      // Load tasks from Firebase after adding a new task
+      _loadTasksFromFirebase();
+    }
   }
 
+  // Show task input dialog
   void _showTaskInputDialog(BuildContext context, Employee employee) {
     TextEditingController taskController = TextEditingController();
 
@@ -138,6 +163,7 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
+  // Initialize state
   @override
   void initState() {
     super.initState();
@@ -145,6 +171,7 @@ class _HomeControllerState extends State<HomeController> {
     _loadEmployees();
   }
 
+  // Load tasks
   Future<void> _loadTasks() async {
     final QuerySnapshot querySnapshot = await _firestore.collection('tasks').get();
     setState(() {
@@ -161,6 +188,7 @@ class _HomeControllerState extends State<HomeController> {
     });
   }
 
+  // Load employees
   void _loadEmployees() {
     _firestore.collection('employees').get().then((QuerySnapshot snapshot) {
       setState(() {
@@ -172,22 +200,26 @@ class _HomeControllerState extends State<HomeController> {
             lastName: data['lastName'],
             position: data['position'],
             tasks: List<String>.from(data['tasks'] ?? []),
+            task_employee: [], // Add the task_employee property here
           );
         }).toList();
       });
     });
   }
 
+  // Edit task
   void _editTask(String taskId, String updatedTask) async {
     await _firestore.collection('tasks').doc(taskId).update({'task': updatedTask});
     _loadTasksFromFirebase();
   }
 
+  // Delete task
   void _deleteTask(String taskId) async {
     await _firestore.collection('tasks').doc(taskId).delete();
     _loadTasksFromFirebase();
   }
 
+  // Build employee card widget
   Widget _buildEmployeeCard(Employee employee) {
     return Card(
       elevation: 5,
@@ -246,6 +278,19 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
+  List<Task> getTask(List<String> tasksUser) {
+    List<Task> list = [];
+    tasks.forEach((element) {
+      tasksUser.forEach((elementUser) {
+        if (element.id == elementUser) {
+          list.add(element);
+        }
+      });
+    });
+    return list;
+  }
+
+  // Show tasks list dialog
   void _showTasksListDialog(BuildContext context, Employee employee) {
     showDialog(
       context: context,
@@ -256,19 +301,19 @@ class _HomeControllerState extends State<HomeController> {
             width: double.maxFinite,
             height: 400,
             child: ListView.builder(
-              itemCount: tasks.length,
+              itemCount: getTask(employee.tasks).length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(tasks[index].task),
-                  subtitle: tasks[index].completed ? Text('Terminé') : Text('En cours'),
+                  title: Text(getTask(employee.tasks)[index].task),
+                  subtitle: getTask(employee.tasks)[index].completed ? Text('Terminé') : Text('En cours'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (!tasks[index].completed && widget.email != 'chaoualihiba25@gmail.com')
+                      if (!getTask(employee.tasks)[index].completed && widget.email != 'chaoualihiba25@gmail.com')
                         ElevatedButton(
                           onPressed: () {
-                            _markTaskAsCompleted(tasks[index].id);
-                            _showCompletionMessage(context, tasks[index].id);
+                            _markTaskAsCompleted(getTask(employee.tasks)[index].id);
+                            _showCompletionMessage(context, getTask(employee.tasks)[index].id);
                           },
                           child: Text('Terminer'),
                         ),
@@ -276,14 +321,14 @@ class _HomeControllerState extends State<HomeController> {
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            _showEditTaskDialog(context, tasks[index]);
+                            _showEditTaskDialog(context, getTask(employee.tasks)[index]);
                           },
                         ),
                       if (widget.email == 'chaoualihiba25@gmail.com')
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            _showDeleteTaskDialog(context, tasks[index].id);
+                            _showDeleteTaskDialog(context, getTask(employee.tasks)[index].id);
                           },
                         ),
                     ],
@@ -312,6 +357,7 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
+  // Show edit task dialog
   void _showEditTaskDialog(BuildContext context, Task task) {
     TextEditingController editTaskController = TextEditingController(text: task.task);
 
@@ -349,6 +395,7 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
+  // Show delete task dialog
   void _showDeleteTaskDialog(BuildContext context, String taskId) {
     showDialog(
       context: context,
@@ -376,6 +423,7 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
+  // Show add employee dialog
   void _showAddEmployeeDialog(BuildContext context) {
     String firstName = '';
     String lastName = '';
@@ -429,17 +477,7 @@ class _HomeControllerState extends State<HomeController> {
     );
   }
 
-  void _addNewEmployee(String firstName, String lastName, String position) {
-    _firestore.collection('employees').add({
-      'firstName': firstName,
-      'lastName': lastName,
-      'position': position,
-      'tasks': [],
-    }).then((_) {
-      _loadEmployees();
-    });
-  }
-
+  // Build the UI(interface utilisateur)
   @override
   Widget build(BuildContext context) {
     return Scaffold(

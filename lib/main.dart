@@ -1,5 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
+// ignore: library_prefixes
+import 'package:profile/di/get_di.dart' as getIt;
 import 'views/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -8,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Assurez-vous que Firebase est initialisé avec les options spécifiées
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  await getIt.setup();
   runApp(const MyApp());
 }
 

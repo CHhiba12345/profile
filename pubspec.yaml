@@ -17,6 +17,7 @@ dependencies:
   flutterfire_cli: ^0.3.0-dev.19
   cloud_firestore: ^4.14.0
   clay_containers: ^0.3.4
+  get_it: ^7.6.7
 
 dev_dependencies:
   flutter_test:

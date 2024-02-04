@@ -19,11 +19,15 @@ class EmailFormField extends StatelessWidget {
       ),
     );
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       //définit un espace vide autour du contenu
       child: TextFormField(
         controller: usernameController,
+        keyboardType: TextInputType.emailAddress,
         autocorrect: false,
+        validator: (value) {
+          return null;
+        },
         decoration: const InputDecoration(
           hintText: "Email",
           border: outlineInputBorder,

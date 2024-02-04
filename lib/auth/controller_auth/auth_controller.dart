@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:profile/auth/model_auth/model_sign_in.dart';
 import 'package:profile/auth/model_auth/model_sign_up.dart';
 import 'package:profile/views/home.dart';
-import 'package:profile/views/signup.dart';
 
 /// +++++++++++++++++ Class [AuthController]++++++++++++++++++++++++
 /// va contenir les methodes de sign-in & sign-up et on va injecter  le classe [FirebaseAuth]
@@ -26,7 +25,6 @@ class AuthController {
         password: password,
       );
       print("=========retour depuis firebase==================");
-      // Si l'authentification est réussie, redirigez l'utilisateur vers la page d'accueil.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -41,7 +39,54 @@ class AuthController {
         //utilisée pour afficher des SnackBars
         //snackBar:une petite barre qui apparaît en bas de l'écran
         SnackBar(
-          content: Text(e.toString()),
+          content: Text(
+            e.toString(),
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  Future<void> registerUser(String email, String password, String address,
+      String phoneNumber, BuildContext context) async {
+    final SignUp model = SignUp(
+      credentiel: SignIn(
+        email: email,
+        password: password,
+      ),
+      phoneNumber: phoneNumber,
+      address: address,
+    );
+
+    try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: model.credentiel.email,
+        password: model.credentiel.password,
+      );
+
+      // Enregistrement réussi, sauvegardez les informations supplémentaires dans Firestore.
+      await firestore.collection('users').doc(userCredential.user!.uid).set({
+        'email': model.credentiel.email,
+        'address': model.address,
+        'phoneNumber': model.phoneNumber,
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              HomeController(email: userCredential.user!.email!),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        //utilisée pour afficher des SnackBars
+        //snackBar:une petite barre qui apparaît en bas de l'écran
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
           duration: const Duration(seconds: 3),
         ),
       );

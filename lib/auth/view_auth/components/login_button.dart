@@ -18,7 +18,7 @@ class LoginButton extends StatelessWidget {
     return MaterialButton(
       onPressed: onPressed,
       color: color,
-      minWidth: 120,
+      minWidth: 140,
       padding: const EdgeInsets.symmetric(
         vertical: 12,
       ),
@@ -31,6 +31,7 @@ class LoginButton extends StatelessWidget {
         title,
         style: TextStyle(
           color: textColor,
+          fontSize: 15,
         ),
       ),
     );

@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:profile/auth/view_auth/sign_in_page/sign_in_page.dart';
 
@@ -8,6 +6,7 @@ import 'package:profile/auth/view_auth/sign_in_page/sign_in_page.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              LoginPage(), // Utilisez le nom correct de votre classe de page de login
+              const LoginPage(), // Utilisez le nom correct de votre classe de page de login
         ),
       );
     });

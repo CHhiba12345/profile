@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:profile/auth/view_auth/sign_in_page/sign_in_page.dart';
 
-import '../controller.dart';
+import '../data/controller.dart';
 
 class ProfilePage extends StatefulWidget {
   final UserController userController;

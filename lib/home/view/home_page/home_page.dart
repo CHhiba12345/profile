@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:profile/data/controller.dart';
 import 'package:profile/home/model/employee_model.dart';
 import 'package:profile/home/model/task_model.dart';
-import '../data/controller.dart';
-
-import 'profile.dart';
+import 'package:profile/views/profile.dart';
 
 class HomePage extends StatefulWidget {
   final String email;
@@ -373,7 +372,7 @@ class _HomeControllerState extends State<HomePage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Fermer'),
+              child: const Text('Fermer'),
             ),
           ],
         );
@@ -412,7 +411,7 @@ class _HomeControllerState extends State<HomePage> {
                 _editTask(task.id, editTaskController.text);
                 Navigator.pop(context);
               },
-              child: Text('Enregistrer'),
+              child: const Text('Enregistrer'),
             ),
           ],
         );
@@ -426,7 +425,7 @@ class _HomeControllerState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Supprimer Tâche'),
+          title: const Text('Supprimer Tâche'),
           content: Text('Êtes-vous sûr de vouloir supprimer cette tâche ?'),
           actions: [
             TextButton(
@@ -458,7 +457,7 @@ class _HomeControllerState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ajouter un Employé'),
+          title: const Text('Ajouter un Employé'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -466,19 +465,19 @@ class _HomeControllerState extends State<HomePage> {
                 onChanged: (value) {
                   firstName = value;
                 },
-                decoration: InputDecoration(labelText: 'Prénom'),
+                decoration: const InputDecoration(labelText: 'Prénom'),
               ),
               TextField(
                 onChanged: (value) {
                   lastName = value;
                 },
-                decoration: InputDecoration(labelText: 'Nom'),
+                decoration: const InputDecoration(labelText: 'Nom'),
               ),
               TextField(
                 onChanged: (value) {
                   position = value;
                 },
-                decoration: InputDecoration(labelText: 'Poste'),
+                decoration: const InputDecoration(labelText: 'Poste'),
               ),
             ],
           ),
@@ -487,14 +486,14 @@ class _HomeControllerState extends State<HomePage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
                 _addNewEmployee(firstName, lastName, position);
                 Navigator.pop(context);
               },
-              child: Text('Enregistrer'),
+              child: const Text('Enregistrer'),
             ),
           ],
         );
@@ -507,11 +506,11 @@ class _HomeControllerState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profil'),
+        title: const Text('Profil'),
         actions: [
           if (widget.email == 'chaoualihiba25@gmail.com')
             IconButton(
-              icon: Icon(Icons.person_add),
+              icon: const Icon(Icons.person_add),
               onPressed: () {
                 _showAddEmployeeDialog(context);
               },

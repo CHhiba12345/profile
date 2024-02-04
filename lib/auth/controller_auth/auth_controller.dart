@@ -28,8 +28,7 @@ class AuthController {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              HomeController(email: userCredential.user!.email!),
+          builder: (context) => HomePage(email: userCredential.user!.email!),
         ),
       );
     } catch (e) {
@@ -75,8 +74,7 @@ class AuthController {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              HomeController(email: userCredential.user!.email!),
+          builder: (context) => HomePage(email: userCredential.user!.email!),
         ),
       );
     } catch (e) {

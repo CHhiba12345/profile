@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 // ignore: library_prefixes
 import 'package:profile/di/get_di.dart' as getIt;
-import 'views/splashscreen.dart';
+import 'package:profile/splash/splash_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
